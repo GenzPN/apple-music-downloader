@@ -1,0 +1,70 @@
+# Apple Music Downloader Configuration
+# Copy this file to config.yaml and configure it
+
+# Required tokens for downloading
+media-user-token: "your-media-user-token" # Required for AAC-LC, lyrics, and music videos
+authorization-token: "your-authorization-token" # Usually auto-obtained, but can be set manually
+
+# Language and region settings
+language: ""         # Supported languages: https://gist.github.com/itouakirai/c8ba9df9dc65bd300094103b058731d0
+storefront: "us"     # Your Apple Music storefront (us, jp, ca, vn, etc.)
+
+# Lyrics settings
+lrc-type: "lyrics"   # lyrics or syllable-lyrics
+lrc-format: "lrc"    # lrc or ttml
+embed-lrc: true      # Embed lyrics in audio files
+save-lrc-file: false # Save lyrics as separate files
+
+# Cover art settings
+save-artist-cover: false
+save-animated-artwork: false    # Requires ffmpeg
+emby-animated-artwork: false    # Requires ffmpeg
+embed-cover: true
+cover-size: 5000x5000
+cover-format: jpg       # jpg, png, or original
+
+# Download folders
+alac-save-folder: "AM-DL downloads"
+atmos-save-folder: "AM-DL-Atmos downloads"
+aac-save-folder: "AM-DL-AAC downloads"
+
+# Performance settings
+max-memory-limit: 256 # MB
+
+# Device settings (for enhanced quality)
+decrypt-m3u8-port: "127.0.0.1:10020"
+get-m3u8-port: "127.0.0.1:20020"
+get-m3u8-from-device: true
+get-m3u8-mode: hires # all or hires
+
+# Audio quality settings
+aac-type: aac-lc # aac-lc, aac, aac-binaural, aac-downmix
+alac-max: 192000  # 192000, 96000, 48000, 44100
+atmos-max: 2768   # 2768, 2448
+limit-max: 200
+
+# File naming formats
+# Available variables: {AlbumId} {AlbumName} {ArtistName} {ReleaseDate} {ReleaseYear} {UPC} {Copyright} {Quality} {Codec} {Tag} {RecordLabel}
+album-folder-format: "{AlbumName}"
+
+# Available variables: {PlaylistId} {PlaylistName} {ArtistName} {Quality} {Codec} {Tag}
+playlist-folder-format: "{PlaylistName}"
+
+# Available variables: {SongId} {SongNumer} {SongName} {DiscNumber} {TrackNumber} {Quality} {Codec} {Tag}
+song-file-format: "{SongNumer}. {SongName}"
+
+# Available variables: {ArtistId} {ArtistName} {UrlArtistName}
+artist-folder-format: "{UrlArtistName}"
+
+# Tags for special content
+explicit-choice: "[E]"
+clean-choice: "[C]"
+apple-master-choice: "[M]"
+
+# Playlist settings
+use-songinfo-for-playlist: false
+dl-albumcover-for-playlist: false
+
+# Music video settings
+mv-audio-type: atmos  # atmos, ac3, aac
+mv-max: 2160 

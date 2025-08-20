@@ -1,9 +1,11 @@
-# Apple Music Downloader
+# Apple Music Downloader - Web Server
 
-Ứng dụng tải xuống nhạc từ Apple Music với hai giao diện: Command Line Interface (CLI) và Web Server.
+Ứng dụng web để tải xuống nhạc từ Apple Music với giao diện người dùng thân thiện.
 
-## 🌟 Tính năng
+## Tính năng
 
+- 🌐 Giao diện web đẹp mắt và dễ sử dụng
+- 📱 Responsive design, hoạt động tốt trên mobile
 - 🎵 Hỗ trợ tải xuống nhiều loại nội dung:
   - Album
   - Bài hát đơn lẻ
@@ -15,14 +17,11 @@
   - Lossless (ALAC)
   - High-Quality (AAC)
   - Dolby Atmos
-- 🌐 Giao diện web đẹp mắt và dễ sử dụng
-- 📱 Responsive design, hoạt động tốt trên mobile
 - 📊 Theo dõi tiến trình tải xuống real-time
 - 📋 Quản lý nhiều task tải xuống cùng lúc
 - 🔄 Tự động cập nhật trạng thái
-- 🔍 Tìm kiếm nội dung trực tiếp từ ứng dụng
 
-## 🚀 Cài đặt nhanh
+## Cài đặt
 
 ### Yêu cầu hệ thống
 
@@ -50,59 +49,23 @@ sudo apt install gpac
 
 ### Cấu hình
 
-1. Sao chép file cấu hình:
-```bash
-cp config.yaml.example config.yaml
-```
+1. Sao chép file `config.yaml` và chỉnh sửa:
 
-2. Chỉnh sửa `config.yaml` với tokens của bạn:
 ```yaml
+# Token cần thiết cho việc tải xuống AAC-LC, lyrics và music videos
 media-user-token: "your-media-user-token"
+
+# Token authorization (thường tự động lấy được)
 authorization-token: "your-authorization-token"
-storefront: "us"  # Thay đổi theo quốc gia của bạn
+
+# Ngôn ngữ
+language: ""
+
+# Storefront của tài khoản Apple Music (quan trọng!)
+storefront: "us"  # Thay đổi theo quốc gia của bạn (us, jp, ca, vn, etc.)
+
+# Các cài đặt khác...
 ```
-
-## 📖 Sử dụng
-
-### Web Server (Khuyến nghị)
-
-Chạy web server với giao diện đẹp:
-
-```bash
-# Sử dụng Makefile
-make run-server
-
-# Hoặc chạy trực tiếp
-go run server_main.go server.go main.go -port 8080
-
-# Trên Windows
-run_server.bat
-
-# Trên Linux/Mac
-./run_server.sh
-```
-
-Mở trình duyệt và truy cập: `http://localhost:8080`
-
-### Command Line Interface
-
-Chạy CLI cho người dùng nâng cao:
-
-```bash
-# Sử dụng Makefile
-make run-cli
-
-# Hoặc chạy trực tiếp
-go run main.go [URL]
-
-# Ví dụ tải xuống album
-go run main.go https://music.apple.com/us/album/album-name/id123456789
-
-# Tìm kiếm
-go run main.go --search album "album name"
-```
-
-## 🔧 Cấu hình chi tiết
 
 ### Lấy tokens
 
@@ -121,6 +84,29 @@ Thường tự động lấy được, nhưng nếu cần:
 4. Tìm request đến `amp-api.music.apple.com`
 5. Trong headers, tìm `authorization`
 
+## Sử dụng
+
+### Chạy server
+
+```bash
+# Chạy với port mặc định (8080)
+go run server_main.go server.go main.go
+
+# Hoặc chạy với port tùy chỉnh
+go run server_main.go server.go main.go -port 3000
+```
+
+### Truy cập web interface
+
+Mở trình duyệt và truy cập: `http://localhost:8080`
+
+### Sử dụng giao diện web
+
+1. **Nhập URL Apple Music**: Dán URL từ Apple Music vào ô input
+2. **Chọn chất lượng**: Chọn chất lượng âm thanh mong muốn
+3. **Bắt đầu tải xuống**: Nhấn nút "Start Download"
+4. **Theo dõi tiến trình**: Xem tiến trình trong phần "Download Tasks"
+
 ### Các loại URL được hỗ trợ
 
 - **Album**: `https://music.apple.com/us/album/album-name/id123456789`
@@ -130,38 +116,50 @@ Thường tự động lấy được, nhưng nếu cần:
 - **Music Video**: `https://music.apple.com/us/music-video/video-name/id123456789`
 - **Station**: `https://music.apple.com/us/station/station-name/ra.123456789`
 
-## 🛠️ Development
+## API Endpoints
 
-### Build
+### POST /api/download
+Bắt đầu tải xuống
 
-```bash
-# Build cho platform hiện tại
-make build
-
-# Build cho tất cả platforms
-make build-all
-
-# Build riêng lẻ
-make build-windows
-make build-linux
-make build-mac
+**Request Body:**
+```json
+{
+  "url": "https://music.apple.com/us/album/...",
+  "quality": "alac"
+}
 ```
 
-### Development với auto-reload
-
-```bash
-make dev
+**Response:**
+```json
+{
+  "task_id": "task_123456789",
+  "status": "started"
+}
 ```
 
-### Testing
+### GET /api/status?task_id=task_id
+Lấy trạng thái task
 
-```bash
-make test
-make fmt
-make lint
+**Response:**
+```json
+{
+  "id": "task_123456789",
+  "url": "https://music.apple.com/...",
+  "type": "album",
+  "status": "processing",
+  "progress": 50,
+  "message": "Downloading album...",
+  "created_at": "2024-01-01T12:00:00Z"
+}
 ```
 
-## 📁 Cấu trúc thư mục tải xuống
+### GET /api/tasks
+Lấy danh sách tất cả tasks
+
+### GET /api/config
+Lấy cấu hình hiện tại
+
+## Cấu trúc thư mục tải xuống
 
 Theo cấu hình trong `config.yaml`, files sẽ được tải xuống vào:
 
@@ -169,32 +167,30 @@ Theo cấu hình trong `config.yaml`, files sẽ được tải xuống vào:
 - **AAC**: `AM-DL-AAC downloads/`
 - **Dolby Atmos**: `AM-DL-Atmos downloads/`
 
-## 🔍 Troubleshooting
+## Troubleshooting
 
-### Lỗi thường gặp
-
-#### "Failed to get authorization token"
+### Lỗi "Failed to get authorization token"
 - Kiểm tra kết nối internet
 - Đảm bảo `authorization-token` trong config.yaml đúng
 
-#### "Media user token is required"
+### Lỗi "Media user token is required"
 - Cần `media-user-token` để tải AAC-LC, lyrics và music videos
 - Lấy token theo hướng dẫn ở trên
 
-#### "Invalid Apple Music URL"
+### Lỗi "Invalid Apple Music URL"
 - Đảm bảo URL đúng định dạng Apple Music
 - URL phải chứa một trong các path: `/album/`, `/song/`, `/playlist/`, `/artist/`, `/music-video/`, `/station/`
 
-#### "Failed to get lyrics"
+### Lỗi "Failed to get lyrics"
 - Kiểm tra `storefront` trong config.yaml có khớp với tài khoản Apple Music
 - Đảm bảo `media-user-token` đúng
 
-#### Files không tải xuống
+### Files không tải xuống
 - Kiểm tra quyền ghi vào thư mục tải xuống
 - Đảm bảo đủ dung lượng ổ cứng
 - Kiểm tra logs trong terminal
 
-## 📚 Tính năng nâng cao
+## Tính năng nâng cao
 
 ### Tùy chỉnh format tên file
 Chỉnh sửa trong `config.yaml`:
@@ -224,7 +220,7 @@ cover-size: 5000x5000
 cover-format: jpg        # jpg, png, hoặc original
 ```
 
-## 🔒 Bảo mật
+## Bảo mật
 
 ⚠️ **Lưu ý quan trọng**: 
 - Không chia sẻ tokens với người khác
@@ -232,12 +228,7 @@ cover-format: jpg        # jpg, png, hoặc original
 - Tuân thủ điều khoản sử dụng của Apple Music
 - Không phân phối lại nội dung đã tải xuống
 
-## 📖 Tài liệu thêm
-
-- [README Web Server](README-WEB.md) - Hướng dẫn chi tiết cho Web Server
-- [README CLI](README-CN.md) - Hướng dẫn chi tiết cho Command Line Interface
-
-## 🤝 Hỗ trợ
+## Hỗ trợ
 
 Nếu gặp vấn đề, hãy:
 1. Kiểm tra logs trong terminal
@@ -245,6 +236,6 @@ Nếu gặp vấn đề, hãy:
 3. Kiểm tra kết nối internet
 4. Thử với URL khác để xác định vấn đề
 
-## 📄 License
+## License
 
-Dự án này chỉ dành cho mục đích giáo dục và sử dụng cá nhân.
+Dự án này chỉ dành cho mục đích giáo dục và sử dụng cá nhân. 

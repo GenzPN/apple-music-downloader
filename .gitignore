@@ -1,9 +1,73 @@
-*
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Test binary, built with `go test -c`
+*.test
+
+# Output of the go coverage tool, specifically when used with LiteIDE
+*.out
+
+# Dependency directories (remove the comment below to include it)
+# vendor/
+
+# Go workspace file
+go.work
+
+# Build artifacts
+apple-music-downloader
+apple-music-downloader-server
+apple-music-downloader-*
+
+# Downloaded content
+AM-DL downloads/
+AM-DL-Atmos downloads/
+AM-DL-AAC downloads/
+
+# Configuration files (keep example)
+config.yaml
+
+# Logs
+*.log
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Temporary files
+*.tmp
+*.temp
+
+# Allow these files
 !.gitignore
 !agent.js
 !agent-arm64.js
 !go.mod
 !go.sum
 !main.go
+!server.go
+!server_main.go
 !README.md
+!README-WEB.md
+!README-CN.md
+!QUICKSTART.md
+!config.yaml.example
+!run_server.bat
+!run_server.sh
+!Makefile
 !utils/*
