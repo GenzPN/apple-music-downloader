@@ -62,6 +62,7 @@ Thumbs.db
 !main.go
 !server.go
 !web_server.go
+!cli_main.go
 !README.md
 !README-WEB.md
 !README-CN.md

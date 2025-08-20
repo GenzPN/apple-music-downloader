@@ -31,7 +31,7 @@ setup:
 # Build the application
 build: install-deps
 	@echo "Building Apple Music Downloader..."
-	go build -o apple-music-downloader main.go
+	go build -o apple-music-downloader cli_main.go main.go
 	go build -o apple-music-downloader-server web_server.go server.go main.go
 
 # Run web server
@@ -43,7 +43,7 @@ run-server: setup
 # Run command line interface
 run-cli: setup
 	@echo "Starting Apple Music Downloader CLI..."
-	go run main.go
+	go run cli_main.go main.go
 
 # Clean build artifacts
 clean:
