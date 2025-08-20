@@ -7,8 +7,6 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"path/filepath"
-	"strconv"
 	"strings"
 	"sync"
 	"time"
@@ -126,8 +124,8 @@ func (s *Server) handleDownload(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var req struct {
-		URL    string `json:"url"`
-		Type   string `json:"type"`
+		URL     string `json:"url"`
+		Type    string `json:"type"`
 		Quality string `json:"quality"`
 	}
 
@@ -230,32 +228,32 @@ func (s *Server) processDownload(task *DownloadTask, storefront, id, quality str
 			s.updateTask(task.ID, "failed", 0, "Failed to get artist information")
 			return
 		}
-		
+
 		// Set artist folder format
 		Config.ArtistFolderFormat = strings.NewReplacer(
 			"{UrlArtistName}", LimitString(urlArtistName),
 			"{ArtistId}", urlArtistID,
 		).Replace(Config.ArtistFolderFormat)
-		
+
 		// Get artist albums (simplified for web interface)
 		albumArgs, err := checkArtist(task.URL, token, "albums")
 		if err != nil {
 			s.updateTask(task.ID, "failed", 0, "Failed to get artist albums")
 			return
 		}
-		
+
 		if len(albumArgs) == 0 {
 			s.updateTask(task.ID, "failed", 0, "No albums found for this artist")
 			return
 		}
-		
+
 		s.updateTask(task.ID, "processing", 50, fmt.Sprintf("Downloading %d albums...", len(albumArgs)))
-		
+
 		// Download each album
 		for i, albumURL := range albumArgs {
 			progress := 50 + (i * 40 / len(albumArgs))
 			s.updateTask(task.ID, "processing", progress, fmt.Sprintf("Downloading album %d of %d", i+1, len(albumArgs)))
-			
+
 			albumStorefront, albumID := checkUrl(albumURL)
 			if albumStorefront != "" && albumID != "" {
 				err = ripAlbum(albumID, token, albumStorefront, s.config.MediaUserToken, "")
@@ -357,7 +355,7 @@ func (s *Server) Start() error {
 
 	log.Printf("Starting Apple Music Downloader server on port %s", s.port)
 	log.Printf("Open your browser and go to: http://localhost:%s", s.port)
-	
+
 	return http.ListenAndServe(":"+s.port, nil)
 }
 
@@ -367,20 +365,20 @@ func (s *Server) loadConfig() error {
 	if err != nil {
 		return err
 	}
-	
+
 	// Use the existing Config variable from main.go
 	if err := yaml.Unmarshal(data, &s.config); err != nil {
 		return err
 	}
-	
+
 	// Also set the global Config variable
 	Config = s.config
-	
+
 	if len(s.config.Storefront) != 2 {
 		s.config.Storefront = "us"
 		Config.Storefront = "us"
 	}
-	
+
 	return nil
 }
 
@@ -707,17 +705,15 @@ const htmlTemplate = `
             
             const statusClass = 'status-' + task.status;
             
-            div.innerHTML = `
-                <div class="task-header">
-                    <strong>` + task.type + ` - ` + task.url.substring(0, 50) + `...</strong>
-                    <span class="task-status ` + statusClass + `">` + task.status + `</span>
-                </div>
-                <div class="progress-bar">
-                    <div class="progress-fill" style="width: ` + task.progress + `%"></div>
-                </div>
-                <div class="task-message">` + task.message + `</div>
-                <small>Created: ` + new Date(task.created_at).toLocaleString() + `</small>
-            `;
+            div.innerHTML = '<div class="task-header">' +
+                '<strong>' + task.type + ' - ' + task.url.substring(0, 50) + '...</strong>' +
+                '<span class="task-status ' + statusClass + '">' + task.status + '</span>' +
+                '</div>' +
+                '<div class="progress-bar">' +
+                '<div class="progress-fill" style="width: ' + task.progress + '%"></div>' +
+                '</div>' +
+                '<div class="task-message">' + task.message + '</div>' +
+                '<small>Created: ' + new Date(task.created_at).toLocaleString() + '</small>';
             
             return div;
         }
