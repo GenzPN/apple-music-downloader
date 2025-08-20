@@ -1601,7 +1601,6 @@ func writeMP4Tags(track *task.Track, lrc string) error {
 
 // CLI main function - removed to avoid conflict with web server
 // This function is now available as a library function for the web server
-}
 
 func mvDownloader(adamID string, saveDir string, token string, storefront string, mediaUserToken string, track *task.Track) error {
 	MVInfo, err := ampapi.GetMusicVideoResp(storefront, adamID, Config.Language, token)
