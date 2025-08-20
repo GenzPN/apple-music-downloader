@@ -7,7 +7,6 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"log"
 	"net"
 	"net/http"
 	"net/url"
@@ -31,7 +30,6 @@ import (
 	"github.com/fatih/color"
 	"github.com/grafov/m3u8"
 	"github.com/olekukonko/tablewriter"
-	"github.com/spf13/pflag"
 	"github.com/zhaarey/go-mp4tag"
 	"gopkg.in/yaml.v2"
 )
