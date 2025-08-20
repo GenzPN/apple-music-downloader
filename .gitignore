@@ -61,7 +61,7 @@ Thumbs.db
 !go.sum
 !main.go
 !server.go
-!server_main.go
+!web_server.go
 !README.md
 !README-WEB.md
 !README-CN.md

@@ -26,4 +26,4 @@ echo "Press Ctrl+C to stop the server"
 echo
 
 # Run the server
-go run server_main.go server.go main.go -port 8080 
+go run web_server.go server.go main.go -port 8080 

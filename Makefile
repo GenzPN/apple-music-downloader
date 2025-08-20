@@ -32,13 +32,13 @@ setup:
 build: install-deps
 	@echo "Building Apple Music Downloader..."
 	go build -o apple-music-downloader main.go
-	go build -o apple-music-downloader-server server_main.go server.go main.go
+	go build -o apple-music-downloader-server web_server.go server.go main.go
 
 # Run web server
 run-server: setup
 	@echo "Starting Apple Music Downloader Web Server..."
 	@echo "Open your browser and go to: http://localhost:8080"
-	go run server_main.go server.go main.go -port 8080
+	go run web_server.go server.go main.go -port 8080
 
 # Run command line interface
 run-cli: setup
@@ -54,15 +54,15 @@ clean:
 # Build for different platforms
 build-windows: install-deps
 	@echo "Building for Windows..."
-	GOOS=windows GOARCH=amd64 go build -o apple-music-downloader-windows.exe server_main.go server.go main.go
+	GOOS=windows GOARCH=amd64 go build -o apple-music-downloader-windows.exe web_server.go server.go main.go
 
 build-linux: install-deps
 	@echo "Building for Linux..."
-	GOOS=linux GOARCH=amd64 go build -o apple-music-downloader-linux server_main.go server.go main.go
+	GOOS=linux GOARCH=amd64 go build -o apple-music-downloader-linux web_server.go server.go main.go
 
 build-mac: install-deps
 	@echo "Building for macOS..."
-	GOOS=darwin GOARCH=amd64 go build -o apple-music-downloader-mac server_main.go server.go main.go
+	GOOS=darwin GOARCH=amd64 go build -o apple-music-downloader-mac web_server.go server.go main.go
 
 # Build all platforms
 build-all: build-windows build-linux build-mac
