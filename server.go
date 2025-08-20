@@ -709,14 +709,14 @@ const htmlTemplate = `
             
             div.innerHTML = `
                 <div class="task-header">
-                    <strong>${task.type} - ${task.url.substring(0, 50)}...</strong>
-                    <span class="task-status ${statusClass}">${task.status}</span>
+                    <strong>` + task.type + ` - ` + task.url.substring(0, 50) + `...</strong>
+                    <span class="task-status ` + statusClass + `">` + task.status + `</span>
                 </div>
                 <div class="progress-bar">
-                    <div class="progress-fill" style="width: ${task.progress}%"></div>
+                    <div class="progress-fill" style="width: ` + task.progress + `%"></div>
                 </div>
-                <div class="task-message">${task.message}</div>
-                <small>Created: ${new Date(task.created_at).toLocaleString()}</small>
+                <div class="task-message">` + task.message + `</div>
+                <small>Created: ` + new Date(task.created_at).toLocaleString() + `</small>
             `;
             
             return div;
